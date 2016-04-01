@@ -3,6 +3,7 @@ from django.conf import settings
 from django.views.generic import View
 from django.contrib import messages
 
+import json
 from utils import helpers
 import models as shop_models
 # import forms as shop_forms
@@ -44,3 +45,32 @@ class ProductDetails(View):
         'product':product,
         'categories':categories,
         })
+
+# from django.views.decorators.csrf import csrf_exempt
+
+
+
+#TODO implement auth check
+class BasketAddItem(View):
+    ##TODO : Remove csrf overide
+    # @csrf_exempt
+    # def dispatch(self, request, *args, **kwargs):
+    #     return super(BasketAddItem, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            product = shop_models.Product.objects.get(id=request.POST["product_id"])
+            prices = product.productprices
+        except Exception as expt:
+            response_data={"status":"failed", "message":str(expt)}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+        # import ipdb; ipdb.set_trace()
+
+        basket, b_obj_created_status = shop_models.Basket.objects.get_or_create(owner=1)
+        basket_line, bl_obj_created_status, = shop_models.BasketLine.objects.get_or_create(basket=basket, product=product)
+        basket_line.price_excl_tax =  1.00 #TODO : implement tax calculations
+        basket_line.price_incl_tax =  prices.selling_price
+        basket_line.price_currency = settings.DEFAULT_CURRENCY
+        basket_line.save()
+        response_data = {"status":"success", "message":"added to cart"}
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")

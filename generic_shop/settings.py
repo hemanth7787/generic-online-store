@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+DEFAULT_CURRENCY = "Rs"
 # Application definition
 
 INSTALLED_APPS = (

@@ -1,4 +1,6 @@
 {% load staticfiles %}
+{% load genshop_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +32,12 @@
 </head><!--/head-->
 
 <body>
+  <!-- Begin AJAX specific setting -->
+  <div id="genshop_js_debug_setting" value="{% debug_enabled %}"></div>
+  <!-- End AJAX specific setting -->
+
+
+
 	<header id="header"><!--header-->
 		<!-- <div class="header_top">
 			<div class="container">
@@ -94,7 +102,7 @@
 								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+								<li id="genshop_js_cart_menu" ><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                 {% if user.is_authenticated %}
                 <li><a> <i class="fa fa-lock"></i> {{user}} </a></li>
                 <li><a href="{% url 'login'%}?action=logout"> <i class="fa fa-eject"></i> Logout? </a></li>
@@ -128,7 +136,7 @@
                                         <li><a href="shop.html">Products</a></li>
 										<li><a href="product-details.html">Product Details</a></li>
 										<li><a href="checkout.html">Checkout</a></li>
-										<li><a href="cart.html">Cart</a></li>
+										<li ><a href="cart.html">Cart</a></li>
 										<li><a href="login.html">Login</a></li>
                                     </ul>
                                 </li>

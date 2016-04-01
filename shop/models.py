@@ -98,8 +98,8 @@ class BasketLine(models.Model):
     product = models.ForeignKey("Product")
     # line_reference = models.CharField(max_length=128)
     quantity = models.PositiveSmallIntegerField(default=1)
-    price_excl_tax = models.DecimalField(max_digits=8, decimal_places=2)
-    price_incl_tax = models.DecimalField(max_digits=8, decimal_places=2)
-    price_currency = models.CharField(max_length=16)
+    price_excl_tax = models.DecimalField(max_digits=8, decimal_places=2,default=0.00)
+    price_incl_tax = models.DecimalField(max_digits=8, decimal_places=2,default=0.00)
+    price_currency = models.CharField(max_length=16, null=True)
     date_created = models.DateTimeField(default=datetime.datetime.now)
     #UNIQUE ("basket_id","line_reference"));
