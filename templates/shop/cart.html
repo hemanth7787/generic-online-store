@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load custom_filters %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block head_title %}
+Cart summary
+{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block "body" %}
+
+
+	<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li class="active">Shopping Cart</li>
+				</ol>
+			</div>
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Item</td>
+							<td class="description"></td>
+							<td class="price">Price</td>
+							<td class="quantity">Quantity</td>
+							<td class="total">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+
+{% if items %}
+            {% for item in items %}
+            <tr class="genshop_js_basket_row" genshop_js_basket_id="{{item.id}}">
+            <td class="cart_product">
+
+              <a href="{% url 'shop_products_details' item.product.id %}">
+              {% if item.product.productimages_set.all.0.image %}
+              {% thumbnail item.product.productimages_set.all.0.image "110x110" padding=True  as im %}
+                  <img src="{{ im.url }}" alt="item.product.name">
+              {% endthumbnail %}
+              {% else %}
+                  <img src="{% static 'theme/images/no_img110.jpg' %}">
+              {% endif %}
+            </a>
+            </td>
+            <td class="cart_description">
+              <h4><a href="">{{item.product.name}}</a></h4>
+              <p>Part no: {{item.product.serial_number}}</p>
+            </td>
+            <td class="cart_price">
+              <!-- TODO : compare cart price and product price and show warning-->
+              <p>{{item.price_incl_tax}}</p>
+            </td>
+            <td class="cart_quantity">
+              <div class="cart_quantity_button">
+                <a class="cart_quantity_down genshop_js_cart_dec" href="javascript:void(0)"> - </a>
+                <input class="cart_quantity_input" type="text" name="quantity" value="{{item.quantity}}" readonly size="2">
+								<a class="cart_quantity_up genshop_js_cart_inc" href="javascript:void(0)"> + </a>
+              </div>
+            </td>
+            <td class="cart_total">
+              <p class="cart_total_price">{{item.line_total}}</p>
+            </td>
+            <td class="cart_delete">
+              <a class="cart_quantity_delete genshop_js_cart_del" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+            </td>
+          </tr>
+            {% endfor %}
+{% else %}
+<tr class="genshop_js_basket_row">
+<td class="cart_product">
+<h3>Your shopping cart is empty!</h3>
+</td>
+</tr>
+{% endif %}
+
+
+	         </tbody>
+				</table>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
+
+	<section id="do_action">
+		<div class="container">
+			<div class="heading">
+				<h3>What would you like to do next?</h3>
+				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="chose_area">
+						<ul class="user_option">
+							<li>
+								<input type="checkbox">
+								<label>Use Coupon Code</label>
+							</li>
+							<li>
+								<input type="checkbox">
+								<label>Use Gift Voucher</label>
+							</li>
+							<li>
+								<input type="checkbox">
+								<label>Estimate Shipping &amp; Taxes</label>
+							</li>
+						</ul>
+						<ul class="user_info">
+							<li class="single_field">
+								<label>Country:</label>
+								<select>
+									<option>United States</option>
+									<option>Bangladesh</option>
+									<option>UK</option>
+									<option>India</option>
+									<option>Pakistan</option>
+									<option>Ucrane</option>
+									<option>Canada</option>
+									<option>Dubai</option>
+								</select>
+
+							</li>
+							<li class="single_field">
+								<label>Region / State:</label>
+								<select>
+									<option>Select</option>
+									<option>Dhaka</option>
+									<option>London</option>
+									<option>Dillih</option>
+									<option>Lahore</option>
+									<option>Alaska</option>
+									<option>Canada</option>
+									<option>Dubai</option>
+								</select>
+
+							</li>
+							<li class="single_field zip-field">
+								<label>Zip Code:</label>
+								<input type="text">
+							</li>
+						</ul>
+						<a class="btn btn-default update" href="">Get Quotes</a>
+						<a class="btn btn-default check_out" href="">Continue</a>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="total_area">
+						<ul>
+							<li>Cart Sub Total <span>$59</span></li>
+							<li>Eco Tax <span>$2</span></li>
+							<li>Shipping Cost <span>Free</span></li>
+							<li>Total <span>$61</span></li>
+						</ul>
+							<a class="btn btn-default update" href="">Update</a>
+							<a class="btn btn-default check_out" href="">Check Out</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!--/#do_action-->
+
+	<div hidden="true" id="genshop_js_basket-modify-url">{% url "shop_basket_modify" %}</div>
+	<div hidden="true" id="genshop_js_csrf">{{ csrf_token }}</div>
+{% endblock %}
+
+
+{% block "scripts" %}
+<script src="{% static 'genshop/js/ajax_functions.js' %}"></script>
+{% endblock %}

@@ -112,8 +112,8 @@ Products
   </div>
 </section>
 
-<div id="genshop_js_basket-add-url">{% url "shop_basket_add" %}</div>
-<div id="genshop_js_csrf">{{ csrf_token }}</div>
+<div hidden="true" id="genshop_js_basket-add-url">{% url "shop_basket_add" %}</div>
+<div hidden="true" id="genshop_js_csrf">{{ csrf_token }}</div>
 {% endblock %}
 
 

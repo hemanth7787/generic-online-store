@@ -65,7 +65,7 @@ class BasketAddItem(View):
             response_data={"status":"failed", "message":str(expt)}
             return http.HttpResponse(json.dumps(response_data), content_type="application/json")
         # import ipdb; ipdb.set_trace()
-
+        #TODO  insert real user here
         basket, b_obj_created_status = shop_models.Basket.objects.get_or_create(owner=1)
         basket_line, bl_obj_created_status, = shop_models.BasketLine.objects.get_or_create(basket=basket, product=product)
         basket_line.price_excl_tax =  1.00 #TODO : implement tax calculations
@@ -74,3 +74,47 @@ class BasketAddItem(View):
         basket_line.save()
         response_data = {"status":"success", "message":"added to cart"}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+class BasketModifyItem(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            basket_line = shop_models.BasketLine.objects.get(id=request.POST["basket_id"])
+            #TODO: if request.user ID != basket.owner.id => permission error
+            #stock = stock= basket_line.product.productstock.quantity
+            if request.POST["action"] == "increment":
+                #TODO: check stock if more is avaliable
+                basket_line.quantity = basket_line.quantity + 1
+                basket_line.save()
+            elif request.POST["action"] == "decrement":
+                if basket_line.quantity > 1:
+                    basket_line.quantity = basket_line.quantity - 1
+                    basket_line.save()
+                else:
+                    raise NameError("only one item, try remove button!")
+            elif request.POST["action"] == "remove":
+                basket_line.delete()
+            else:
+                raise NameError("action not defined")
+            response_data = {
+            "status":"success",
+            "message":"added to cart",
+            "payload" : {
+                "qty":str(basket_line.quantity),
+                "total":str(basket_line.line_total()),
+                "price":str(basket_line.price_incl_tax)
+                }
+            }
+        except Exception as expt:
+            response_data={"status":"failed", "message":str(expt)}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+class BasketListItems(View):
+    def get(self, request, *args, **kwargs):
+        #TODO  insert real user here
+        basket, b_obj_created_status = shop_models.Basket.objects.get_or_create(owner=1)
+        basket_lines = shop_models.BasketLine.objects.filter(basket=basket)
+
+        return  shortcuts.render(request, "shop/cart.html",{
+        "items" : basket_lines
+        })

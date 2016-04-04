@@ -103,3 +103,5 @@ class BasketLine(models.Model):
     price_currency = models.CharField(max_length=16, null=True)
     date_created = models.DateTimeField(default=datetime.datetime.now)
     #UNIQUE ("basket_id","line_reference"));
+    def line_total(self):
+        return self.quantity * self.price_incl_tax
