@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^basket/add/$', shop_views.BasketAddItem.as_view(), name='shop_basket_add'),
     url(r'^basket/modify/$', shop_views.BasketModifyItem.as_view(), name='shop_basket_modify'),
     url(r'^basket/list/$', shop_views.BasketListItems.as_view(), name='shop_basket_list'),
+    url(r'^checkout/$', shop_views.Checkout.as_view(), name='shop_checkout'),
 )

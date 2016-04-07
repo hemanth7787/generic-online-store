@@ -118,3 +118,8 @@ class BasketListItems(View):
         return  shortcuts.render(request, "shop/cart.html",{
         "items" : basket_lines
         })
+
+class Checkout(View):
+    def get(self, request, *args, **kwargs):
+        return  shortcuts.render(request, "shop/checkout.html",{
+        })
