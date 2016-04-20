@@ -189,7 +189,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="83" y="130" name="auth_user">
+<table x="123" y="137" name="auth_user">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -459,6 +459,10 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="address" row="id" />
 </row>
+<row name="addr_user" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="auth_user" row="id" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -470,6 +474,10 @@
 <row name="addr_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="address" row="id" />
+</row>
+<row name="addr_user" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="auth_user" row="id" />
 </row>
 <key type="PRIMARY" name="">
 <part>id</part>
