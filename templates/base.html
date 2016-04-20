@@ -101,7 +101,7 @@
 							<ul class="nav navbar-nav">
 								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a href="{% url 'shop_checkout' %}"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li id="genshop_js_cart_menu" ><a href="{% url 'shop_basket_list' %}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                 {% if user.is_authenticated %}
                 <li><a> <i class="fa fa-lock"></i> {{user}} </a></li>
@@ -133,7 +133,7 @@
 								<li><a href="index.html" class="active">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html">Products</a></li>
+                                        <li><a href="{% url 'shop_products_list' %}">Products</a></li>
 										<li><a href="product-details.html">Product Details</a></li>
 										<li><a href="checkout.html">Checkout</a></li>
 										<li ><a href="cart.html">Cart</a></li>

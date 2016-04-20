@@ -157,13 +157,12 @@ Cart summary
 				<div class="col-sm-6">
 					<div class="total_area">
 						<ul>
-							<li>Cart Sub Total <span>$59</span></li>
-							<li>Eco Tax <span>$2</span></li>
-							<li>Shipping Cost <span>Free</span></li>
-							<li>Total <span>$61</span></li>
+							<li>Cart Sub Total <span id="genshop_js_sub_total">$59</span></li>
+							<li>Shipping Cost <span id="genshop_js_shipping_cost">0.00</span></li>
+							<li>Total <span id="genshop_js_total_cost">$61</span></li>
 						</ul>
 							<a class="btn btn-default update" href="">Update</a>
-							<a class="btn btn-default check_out" href="">Check Out</a>
+							<a class="btn btn-success check_out" href="{% url 'shop_checkout' %}">Check Out</a>
 					</div>
 				</div>
 			</div>
