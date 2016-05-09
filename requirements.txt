@@ -3,12 +3,16 @@ Pillow==3.0.0
 sorl-thumbnail==12.3
 
 # Development
-ipdb==0.8.1
+ipython
+ipdb
 django-debug-toolbar==1.4
 Fabric==1.10.2
 
 # Production
-uWSGI==2.0.11.2
+#uWSGI==2.0.11.2
 
 # Environment specific
-mysqlclient==1.3.7
+#mysqlclient==1.3.7
+
+#windows
+pyreadline==2.1
