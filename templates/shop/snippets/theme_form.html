@@ -1,0 +1,22 @@
+<!-- form variable is required -->
+    {{ form.non_field_errors }}
+    {% for field in form %}
+
+            <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+             {{ field }}
+            {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+            {{ field.errors }}
+
+            {% if forloop.counter == 5  %}
+        </div>
+        <div class="form-two">
+            {%  endif %}
+
+    {% endfor %}
+
+
+
+<!-- "Dont forget to include below in scipts for styling"
+$(".fieldWrapper").children( ":input").addClass('form-control') -->
