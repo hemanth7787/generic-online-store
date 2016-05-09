@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from shop import views as shop_views
 
 urlpatterns = patterns('',
