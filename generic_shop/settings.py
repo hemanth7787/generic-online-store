@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'gs_core',
     'gs_admin',
     'shop',
+    'order',
 )
 
 MIDDLEWARE_CLASSES = (
