@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import logging
+import datetime
 
 from shop import models as shop_models
 #globals
@@ -31,11 +32,13 @@ class Order(models.Model):
 class BillingAddress(models.Model):
     addr_user = models.ForeignKey(User)
     addr = models.OneToOneField(shop_models.Address)
+    date_created = models.DateTimeField(default=datetime.datetime.now)
 
 class ShippingAddress(models.Model):
     addr_user = models.ForeignKey(User)
     addr = models.OneToOneField(shop_models.Address)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
+    date_created = models.DateTimeField(default=datetime.datetime.now)
 
 class OrderLine(models.Model):
     order = models.ForeignKey("Order")

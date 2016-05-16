@@ -1,11 +1,12 @@
 from django import http, shortcuts
 from django.conf import settings
 from django.views.generic import View
-# from django.contrib import messages
+from django.contrib import messages
 
 import json
 from utils import helpers
 import models as shop_models
+from order import models as order_models
 from shop import forms as shop_forms
 # import forms as shop_forms
 # import datetime
@@ -140,7 +141,7 @@ class BasketListItems(View):
             "items": basket_lines
         })
 
-
+import ipdb
 class Checkout(View):
 
     def get(self, request, *args, **kwargs):
@@ -150,4 +151,34 @@ class Checkout(View):
         })
 
     def post(self, request, *args, **kwargs):
-        ipdb.set_trace()
+        billing_form = shop_forms.BillingForm(request.POST,prefix="bform")
+        shipping_form = shop_forms.ShippingForm(request.POST, prefix="sform")
+        #ipdb.set_trace()
+        try:
+            dummy = request.POST["bform-same_as_shipping_address"]
+            billing_addr_same = True
+            billing_form = shop_forms.BillingForm(prefix="bform", initial={"same_as_shipping_address":True})
+        except KeyError:
+            billing_addr_same = False
+
+        if shipping_form.is_valid() and billing_addr_same or billing_form.is_valid():
+            ship_addr = shipping_form.save()
+            shipping_address = order_models.ShippingAddress()
+            shipping_address.addr_user = request.user
+            shipping_address.addr = ship_addr
+            shipping_address.save()
+            # TODO shipping_address.notes = ""
+            if not billing_addr_same:
+                addr_obj = billing_form.save()
+                billing_addr = order_models.BillingAddress()
+                billing_addr.addr = addr_obj
+                billing_addr.addr_user = request.user
+                billing_addr.save()
+            messages.success(request, 'Successful..')
+            return shortcuts.redirect("purchase_summary")
+        else:
+            messages.error(request, 'Plese correct the errors below..')
+        return shortcuts.render(request, "shop/checkout.html", {
+            "billing_form": billing_form,
+            "shipping_form": shipping_form
+        })

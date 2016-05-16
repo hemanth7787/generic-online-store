@@ -29,6 +29,12 @@
     {% endblock %}
     {% block css %}
     {% endblock %}
+    <style media="screen">
+      .errorlist{
+      color: #FF1616;
+      margin: 4px 0px;
+      }
+    </style>
 </head><!--/head-->
 
 <body>
@@ -350,10 +356,16 @@ $( document ).ready(function() {
     {% endfor %}
 });
 {% endif %}
-</script>
 
-{% block "scripts" %}
-{% endblock %}
+
+
+
+
+        </script>
+    {% if messages %}
+    {% endif %}
+    {% block "scripts" %}
+    {% endblock %}
 
 </body>
 </html>

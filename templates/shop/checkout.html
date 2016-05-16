@@ -116,11 +116,13 @@ Checkout
   </div>
 </form>
     </div>
-    <div class="review-payment">
-      <h2>Review &amp; Payment</h2>
-    </div>
 
-    <div class="table-responsive cart_info">
+
+    <!-- <div class="review-payment">
+      <h2>Review &amp; Payment</h2>
+    </div> -->
+
+     <!-- <div class="table-responsive cart_info">
       <table class="table table-condensed">
         <thead>
           <tr class="cart_menu">
@@ -234,8 +236,8 @@ Checkout
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="payment-options">
+    </div> -->
+    <!-- <div class="payment-options">
         <span>
           <label><input type="checkbox"> Direct Bank Transfer</label>
         </span>
@@ -245,7 +247,7 @@ Checkout
         <span>
           <label><input type="checkbox"> Paypal</label>
         </span>
-      </div>
+      </div> -->
   </div>
 </section> <!--/#cart_items-->
 
@@ -254,20 +256,23 @@ Checkout
 
 {% block "scripts" %}
 <script>
+function checkbox_action(jquery_checkbox_obj){
+  if(jquery_checkbox_obj.is(":checked")){
+    $('#billing_form  :input[type=text]').prop('disabled', true);
+    $('#billing_form  label').not("label[for="+jquery_checkbox_obj.id+"]").css({color:'#ccc'});
+  }
+  else{
+    $('#billing_form  :input[type=text]').prop('disabled', false);
+    $('#billing_form  label').css({color:'#333'});
+  }
+}
+
+$( document ).ready(function() {
+checkbox_action($( "#id_bform-same_as_shipping_address" ));
+});
+
 $( "#id_bform-same_as_shipping_address" ).click(function() {
-// console.log( this.attributes["productid"].nodeValue );
-if(this.checked){
-  $('#billing_form  :input[type=text]').prop('disabled', true);
-  $('#billing_form  label').not("label[for="+this.id+"]").css({color:'#ccc'});
-}
-else{
-  $('#billing_form  :input[type=text]').prop('disabled', false);
-  $('#billing_form  label').css({color:'#333'});
-}
-
-
-// var data = {"product_id":this.attributes["productid"].nodeValue}
-// ajax_request(url,"POST",data, acknowledge_response,this);
+  checkbox_action($(this));
 });
 </script>
 <!-- <script src="{% static 'genshop/js/ajax_functions.js' %}"></script> -->

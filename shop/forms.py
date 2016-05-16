@@ -1,7 +1,6 @@
 from django import forms
 from shop import models as shop_models
 
-
 class ShippingForm(forms.ModelForm):
     pass
 
@@ -12,7 +11,7 @@ class ShippingForm(forms.ModelForm):
 
 
 class BillingForm(forms.ModelForm):
-    same_as_shipping_address = forms.BooleanField()
+    same_as_shipping_address = forms.BooleanField(required=False)
 
     class Meta:
         model = shop_models.Address
