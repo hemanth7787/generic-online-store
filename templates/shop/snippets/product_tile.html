@@ -14,7 +14,7 @@
             <img src="{% static 'theme/images/no_img.jpg' %}">
         {% endif %}
       </a>
-        <h2>{{item.productprices_set.all.0.selling_price|currency}}</h2>
+        <h2>{{item.productprices.selling_price|currency}}</h2>
         <p>{{item.name}}</p><!-- TODO: long name support -->
         <!-- <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a> -->
       </div>

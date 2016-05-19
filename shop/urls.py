@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^basket/modify/$', shop_views.BasketModifyItem.as_view(), name='shop_basket_modify'),
     url(r'^basket/list/$', shop_views.BasketListItems.as_view(), name='shop_basket_list'),
     url(r'^checkout/$', shop_views.Checkout.as_view(), name='shop_checkout'),
+    url(r'^checkout_summary/$', shop_views.CheckoutSummary.as_view(), name='shop_checkout_summary'),
 )

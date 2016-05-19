@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load custom_filters %}
+
+{% block head %}
+<style>
+.form-one > select, .form-two > select, .form-two > input, .form-one  > input {
+    background: #F0F0E9;
+    border: 0 none;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    font-weight: 300;
+}
+</style>
+{% endblock %}
+
+
+{% block head_title %}
+Cart summary
+{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+{% block "body" %}
+
+<section id="cart_items">
+  <div class="container">
+    <div class="breadcrumbs">
+      <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li >Check out</li>
+        <li class="active">Shipping Address</li>
+        <li >Review Order</li>
+        <li >Payment</li>
+        <li >Confirmation</li>
+      </ol>
+    </div><!--/breadcrums-->
+
+    <div class="step-one">
+      <h2 class="heading">Step1</h2>
+    </div>
+    <!-- <div class="checkout-options">
+      <h3>New User</h3>
+      <p>Checkout options</p>
+      <ul class="nav">
+        <li>
+          <label><input type="checkbox"> Register Account</label>
+        </li>
+        <li>
+          <label><input type="checkbox"> Guest Checkout</label>
+        </li>
+        <li>
+          <a href=""><i class="fa fa-times"></i>Cancel</a>
+        </li>
+      </ul>
+    </div> -->
+    <!--/checkout-options-->
+<!--
+    <div class="register-req">
+      <p>Please use Register And Checkout to easily get access to your order history, or use Checkout as Guest</p>
+    </div> -->
+    <!--/register-req-->
+
+    <div class="shopper-informations">
+      <div class="row">
+        <!-- <div class="col-sm-3">
+          <div class="shopper-info">
+            <p>Shopper Information</p>
+            <form>
+              <input type="text" placeholder="Display Name">
+              <input type="text" placeholder="User Name">
+              <input type="password" placeholder="Password">
+              <input type="password" placeholder="Confirm password">
+            </form>
+            <a class="btn btn-primary" href="">Get Quotes</a>
+            <a class="btn btn-primary" href="">Continue</a>
+          </div>
+        </div> -->
+        <form method="POST" >
+
+        <div class="col-sm-5 clearfix">
+          <div class="bill-to">
+            <p>Shipping address</p>
+            <div class="form-one">
+                {% include "shop/snippets/theme_form.html" with form=shipping_form %}
+            </div>
+        </div>
+      </div>
+
+      <div class="col-sm-5 clearfix">
+        <div class="bill-to">
+          <p>Billing address</p>
+          <div class="form-one">
+              {% include "shop/snippets/theme_form.html" with form=billing_form %}
+          </div>
+      </div>
+    </div>
+
+    <div class="col-sm-5 clearfix">
+      <div class="bill-to">
+        <div class="form-one">
+                            {% csrf_token %}
+            <input class="btn btn-default " type="submit"/>
+
+        </div>
+    </div>
+  </div>
+</form>
+    </div>
+    <div class="review-payment">
+      <h2>Review &amp; Payment</h2>
+    </div>
+
+
+
+
+  			<div class="table-responsive cart_info">
+  				<table class="table table-condensed">
+  					<thead>
+  						<tr class="cart_menu">
+  							<td class="image">Item</td>
+  							<td class="description"></td>
+  							<td class="price">Price</td>
+  							<td class="quantity">Quantity</td>
+  							<td class="total">Total</td>
+  							<td></td>
+  						</tr>
+  					</thead>
+  					<tbody>
+
+  {% if items %}
+              {% for item in items %}
+              <tr>
+              <td class="cart_product">
+
+                <a href="{% url 'shop_products_details' item.product.id %}">
+                {% if item.product.productimages_set.all.0.image %}
+                {% thumbnail item.product.productimages_set.all.0.image "64x64" padding=True  as im %}
+                    <img src="{{ im.url }}" alt="item.product.name">
+                {% endthumbnail %}
+                {% else %}
+                    <img src="{% static 'theme/images/no_img110.jpg' %}">
+                {% endif %}
+              </a>
+              </td>
+              <td class="cart_description">
+                <h4><a href="">{{item.product.name}}</a></h4>
+                <p>Part no: {{item.product.serial_number}}</p>
+              </td>
+              <td class="cart_price">
+                <!-- TODO : compare cart price and product price and show warning-->
+                <p>{{item.price_incl_tax}}</p>
+              </td>
+              <td class="cart_quantity cart_price">
+                  <p>{{item.quantity}}</p>
+              </td>
+              <td class="cart_total">
+                <p class="cart_total_price">{{item.line_total}}</p>
+              </td>
+
+            </tr>
+      {% endfor %}
+              <tr>
+                <td colspan="4">&nbsp;</td>
+                <td colspan="2">
+                  <table class="table table-condensed total-result">
+                    <tr>
+                      <td>Cart Sub Total</td>
+                      <td>$59</td>
+                    </tr>
+                    <tr>
+                      <td>Exo Tax</td>
+                      <td>$2</td>
+                    </tr>
+                    <tr class="shipping-cost">
+                      <td>Shipping Cost</td>
+                      <td>Free</td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td><span>$61</span></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+  {% else %}
+  <tr class="genshop_js_basket_row">
+  <td class="cart_product">
+  <h3>Your shopping cart is empty!</h3>
+  </td>
+  </tr>
+  {% endif %}
+
+
+  	         </tbody>
+  				</table>
+  			</div>
+
+
+
+  <div class="payment-options">
+<a class="btn btn-success check_out" href="{% url 'shop_checkout' %}">Proceed to payment</a>
+  </div>
+</section> <!--/#cart_items-->
+
+{% endblock %}
+
+
+{% block "scripts" %}
+<!-- <script src="{% static 'genshop/js/ajax_functions.js' %}"></script> -->
+{% endblock %}

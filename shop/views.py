@@ -74,10 +74,8 @@ class BasketAddItem(View):
             response_data = {"status": "failed", "message": str(expt)}
             return http.HttpResponse(
                 json.dumps(response_data), content_type="application/json")
-        # import ipdb; ipdb.set_trace()
-        # TODO  insert real user here
         basket, b_obj_created_status = \
-            shop_models.Basket.objects.get_or_create(owner=1)
+            shop_models.Basket.objects.get_or_create(owner=request.user)
         basket_line, bl_obj_created_status = \
             shop_models.BasketLine.objects.get_or_create(
                 basket=basket, product=product)
@@ -141,7 +139,6 @@ class BasketListItems(View):
             "items": basket_lines
         })
 
-import ipdb
 class Checkout(View):
 
     def get(self, request, *args, **kwargs):
@@ -175,10 +172,18 @@ class Checkout(View):
                 billing_addr.addr_user = request.user
                 billing_addr.save()
             messages.success(request, 'Successful..')
-            return shortcuts.redirect("purchase_summary")
+            return shortcuts.redirect("shop_checkout_summary")
         else:
             messages.error(request, 'Plese correct the errors below..')
         return shortcuts.render(request, "shop/checkout.html", {
             "billing_form": billing_form,
             "shipping_form": shipping_form
+        })
+
+class CheckoutSummary(View):
+    def get(self, request, *args, **kwargs):
+        basket = shop_models.Basket.objects.get(owner=request.user)
+        basket_lines = shop_models.BasketLine.objects.filter(basket=basket)
+        return shortcuts.render(request, "shop/checkout_summary.html", {
+            "items": basket_lines
         })
