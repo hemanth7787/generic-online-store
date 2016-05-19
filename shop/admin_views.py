@@ -331,7 +331,7 @@ class VendorAdmin(View):
 class VendorsCreate(View):
     def get(self, request, *args, **kwargs):
         form = shop_forms.VendorForm()
-        vendor_address_form = shop_forms.VendorAddressForm()
+        vendor_address_form = shop_forms.AddressForm()
         return  render(request, "admin/shop/categories_create.html",{
             'formbundle':[
             ("Vendor details",form),
