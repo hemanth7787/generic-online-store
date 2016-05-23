@@ -5,6 +5,7 @@ urlpatterns = [
     url(r'^admin/shop/', include('shop.admin_urls')),
     url(r'^shop/', include('shop.urls')),
     url(r'^auth/', include('user_profiles.urls')),
+    url(r'^order/', include('order.urls')),
     url(r'^', include('gs_core.urls')),
 ]
 

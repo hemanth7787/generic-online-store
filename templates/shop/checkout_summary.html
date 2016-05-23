@@ -13,12 +13,18 @@
     width: 100%;
     font-weight: 300;
 }
+
+.big_text p {
+    color: #696763;
+    font-size: 20px;
+    font-weight: 300;
+}
 </style>
 {% endblock %}
 
 
 {% block head_title %}
-Cart summary
+Checkout summary
 {% endblock %}
 
 
@@ -41,7 +47,7 @@ Cart summary
     </div><!--/breadcrums-->
 
     <div class="step-one">
-      <h2 class="heading">Step1</h2>
+      <h2 class="heading">Checkout summary</h2>
     </div>
     <!-- <div class="checkout-options">
       <h3>New User</h3>
@@ -67,6 +73,52 @@ Cart summary
 
     <div class="shopper-informations">
       <div class="row">
+
+<div class="col-xs-6 col-sm-4">
+  <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Shipping address</h3>
+  </div>
+  <div class="panel-body">
+    <p>{{order.shiping_address.addr.title}}<p>
+    <p>{{order.shiping_address.addr.first_name}} {{order.shiping_address.addr.last_name}}<p>
+    <p>{{order.shiping_address.addr.line1}}<p>
+    <p>{{order.shiping_address.addr.line2}}<p>
+    <p>{{order.shiping_address.addr.line3}}<p>
+    <p>{{order.shiping_address.addr.line4}}<p>
+    <p>{{order.shiping_address.addr.phone}}<p>
+    <p>{{order.shiping_address.addr.state}}<p>
+    <p>{{order.shiping_address.addr.postcode}}<p>
+  </div>
+</div>
+</div>
+
+<div class="col-xs-6 col-sm-4"></div>
+<div class="col-xs-6 col-sm-4">
+  <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Billing address</h3>
+  </div>
+  <div class="panel-body">
+    {% if order.bill_same_as_ship %}
+    <p> Same as shipping address  </p>
+    {% else %}
+    <p>{{order.billing_address.addr.title}}<p>
+    <p>{{order.billing_address.addr.first_name}} {{order.billing_address.addr.last_name}}<p>
+    <p>{{order.billing_address.addr.line1}}<p>
+    <p>{{order.billing_address.addr.line2}}<p>
+    <p>{{order.billing_address.addr.line3}}<p>
+    <p>{{order.billing_address.addr.line4}}<p>
+    <p>{{order.billing_address.addr.phone}}<p>
+    <p>{{order.billing_address.addr.state}}<p>
+    <p>{{order.billing_address.addr.postcode}}<p>
+    {% endif %}
+  </div>
+</div>
+</div>
+  <!-- col-xs-6 col-sm-4
+
+        .col-md-4.col-md-4.col-md-4 -->
         <!-- <div class="col-sm-3">
           <div class="shopper-info">
             <p>Shopper Information</p>
@@ -80,36 +132,7 @@ Cart summary
             <a class="btn btn-primary" href="">Continue</a>
           </div>
         </div> -->
-        <form method="POST" >
 
-        <div class="col-sm-5 clearfix">
-          <div class="bill-to">
-            <p>Shipping address</p>
-            <div class="form-one">
-                {% include "shop/snippets/theme_form.html" with form=shipping_form %}
-            </div>
-        </div>
-      </div>
-
-      <div class="col-sm-5 clearfix">
-        <div class="bill-to">
-          <p>Billing address</p>
-          <div class="form-one">
-              {% include "shop/snippets/theme_form.html" with form=billing_form %}
-          </div>
-      </div>
-    </div>
-
-    <div class="col-sm-5 clearfix">
-      <div class="bill-to">
-        <div class="form-one">
-                            {% csrf_token %}
-            <input class="btn btn-default " type="submit"/>
-
-        </div>
-    </div>
-  </div>
-</form>
     </div>
     <div class="review-payment">
       <h2>Review &amp; Payment</h2>
@@ -132,8 +155,8 @@ Cart summary
   					</thead>
   					<tbody>
 
-  {% if items %}
-              {% for item in items %}
+  {% if order_lines %}
+              {% for item in order_lines %}
               <tr>
               <td class="cart_product">
 

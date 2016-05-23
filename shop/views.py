@@ -12,6 +12,8 @@ from shop import forms as shop_forms
 # import datetime
 import logging
 import ipdb
+import decimal
+import datetime
 
 # globals
 if not settings.DEBUG:
@@ -159,31 +161,58 @@ class Checkout(View):
             billing_addr_same = False
 
         if shipping_form.is_valid() and billing_addr_same or billing_form.is_valid():
+            basket = shop_models.Basket.objects.get(owner=request.user)
+            basket_lines = basket.basketline_set.all()
+            basket_total = decimal.Decimal(0.00)
+            for line in basket_lines:
+                basket_total += line.line_total()
             ship_addr = shipping_form.save()
             shipping_address = order_models.ShippingAddress()
             shipping_address.addr_user = request.user
             shipping_address.addr = ship_addr
             shipping_address.save()
             # TODO shipping_address.notes = ""
+            order = order_models.Order()
+            order.user = request.user
+            order.basket = basket
+            order.shiping_address = shipping_address
+            order.order_number = "000" # TODO: add random
+            order.total_excl_tax = basket_total
+            order.total_incl_tax = basket_total
+            order.shipping_incl_tax = 0.00
+            order.shipping_excl_tax = 0.00
+            order.shipping_method = "flat"
+            order.shipping_code = "FCR"
+            order.guest_email = request.user.email
+            order.bill_same_as_ship = billing_addr_same
+            order.date_created = datetime.datetime.now()
+
             if not billing_addr_same:
                 addr_obj = billing_form.save()
                 billing_addr = order_models.BillingAddress()
                 billing_addr.addr = addr_obj
                 billing_addr.addr_user = request.user
                 billing_addr.save()
+                order.billing_address = billing_addr
+            order.save()
+
+            order_lines_bulk = list()
+            for line in basket_lines:
+                order_lines_bulk.append(order_models.OrderLine(
+                    order = order,
+                    product = line.product,
+                    quantity = line.quantity,
+                    price_excl_tax = line.price_excl_tax,
+                    price_incl_tax = line.price_incl_tax,
+                    price_currency = line.price_currency,
+                ))
+            order_models.OrderLine.objects.bulk_create(order_lines_bulk)
+
             messages.success(request, 'Successful..')
-            return shortcuts.redirect("shop_checkout_summary")
+            return shortcuts.redirect("order_checkout_summary", order_id=order.id)
         else:
             messages.error(request, 'Plese correct the errors below..')
         return shortcuts.render(request, "shop/checkout.html", {
             "billing_form": billing_form,
             "shipping_form": shipping_form
-        })
-
-class CheckoutSummary(View):
-    def get(self, request, *args, **kwargs):
-        basket = shop_models.Basket.objects.get(owner=request.user)
-        basket_lines = shop_models.BasketLine.objects.filter(basket=basket)
-        return shortcuts.render(request, "shop/checkout_summary.html", {
-            "items": basket_lines
         })
